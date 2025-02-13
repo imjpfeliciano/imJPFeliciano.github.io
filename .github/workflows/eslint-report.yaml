@@ -1,0 +1,57 @@
+name: ESLint Report
+
+on:
+  push:
+    branches:
+      - test/* # Runs on test/* branches
+      - main
+  schedule:
+    - cron: '0 9 * * 1' # Runs every Monday at 9 AM UTC
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run ESLint Report
+        run: npm run lint:report
+
+      - name: Clean JSON Output
+        run: |
+          grep '^{' eslint-report.json > cleaned-eslint-report.json
+          mv cleaned-eslint-report.json eslint-report.json
+
+      - name: Get the current commit SHA
+        id: get_commit_sha
+        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+
+      - name: Generate ESLint Chart
+        run: node .github/scripts/generate-eslint-chart.js $GITHUB_SHA
+
+      - name: Set up AWS CLI
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set region us-east-1 # Change this to your region if needed
+
+      - name: Upload ESLint Chart to S3
+        run: |
+          aws s3 cp ./eslint-chart.png s3://${{ secrets.AWS_S3_BUCKET }}/eslint-chart-${{ steps.get_commit_sha.outputs.sha }}.png
+          echo "Image uploaded to S3"
+
+      - name: Generate Public URL for S3 Image
+        id: generate_url
+        run: |
+          IMAGE_URL="https://${{ secrets.AWS_S3_BUCKET }}.s3.us-east-1.amazonaws.com/eslint-chart-${{ steps.get_commit_sha.outputs.sha }}.png"
+          echo "IMAGE_URL=$IMAGE_URL" >> $GITHUB_ENV
+
+      - name: Send Slack Notification
+        run: node .github/scripts/send-to-slack.js
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          IMAGE_URL: ${{ env.IMAGE_URL }}

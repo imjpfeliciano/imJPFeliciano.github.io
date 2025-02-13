@@ -1,13 +1,5 @@
+import { TimelineItem } from '../../../data/experiences'
 import Card from '../Card'
-
-interface TimelineItem {
-  title: string
-  company: string
-  date: string
-  description: string
-  color: string
-  isLast?: boolean
-}
 
 const TimelineItem: React.FC<TimelineItem> = ({
   title,
@@ -20,13 +12,14 @@ const TimelineItem: React.FC<TimelineItem> = ({
     <div className="flex flex-col justify-center items-center gap-2">
       <Card>
         <div className="flex flex-col md:flex-row gap-4">
-          <div className="text-center md:w-1/3">
+          <div className="text-center md:w-1/3 flex flex-col gap-2">
             <h3 className="text-slate-800 dark:text-slate-500 text-lg font-light">
               {`${company} { ${date} }`}
             </h3>
             <h2 className="text-black dark:text-white font-bold text-xl">
               {title}
             </h2>
+            <div></div>
           </div>
 
           <div

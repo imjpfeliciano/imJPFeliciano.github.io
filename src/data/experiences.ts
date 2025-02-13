@@ -1,13 +1,20 @@
-export const experiences = [
+export interface TimelineItem {
+  title: string
+  company: string
+  date: string
+  description: string
+  isLast?: boolean
+  technologies?: string[]
+}
+
+export const experiences: TimelineItem[] = [
   {
     title: 'Sr Software Engineer',
     company: 'Cerbyinc',
     date: '2023 - Current',
     description:
       'Full stack developer, working in cibersecurity platform. Using React, Typescript',
-    companyUrl: 'https://www.cerby.com/',
-    companyLogo: '',
-    color: '#0d6cfb',
+    technologies: ['React', 'Typescript'],
   },
   {
     title: 'Sr Software Engineer',
@@ -15,14 +22,10 @@ export const experiences = [
     date: '2021 - 2023',
     description:
       'Full stack developer, working with React, Nodejs, MongoDB, AWS.',
-    companyUrl: 'https://humanapi.co',
-    companyLogo: '/assets/images/experience/human-api.png',
-    color: '#0d6cfb',
+    technologies: ['React', 'Nodejs', 'MongoDB', 'AWS'],
   },
   {
-    color: '#e93d44',
     title: 'Software Engineer III',
-    companyLogo: '/assets/images/experience/wizeline.png',
     company: 'Wizeline',
     date: '2017 - 2021',
     description: `
@@ -33,19 +36,15 @@ export const experiences = [
         `,
   },
   {
-    color: '#80388D',
     title: 'Software Developer',
     company: 'SalesUp!',
-    companyLogo: '/assets/images/experience/salesup.png',
     date: '2016 - 2017',
     description:
       'I helped by improving the framework to serve the frontend pages using technologies such as vanilla javascript and handlebars templates, but also I helped with a migration of the file management system by doing a re-platform for the system always thinking in a cloud environment using AWS services such as SQS, EC2, Lambdas.',
   },
   {
-    color: '#ea0074',
     title: 'Software Developer (Intern)',
     company: 'PriceTravel Holding',
-    companyLogo: '/assets/images/experience/price-travel.png',
     date: '2015',
     description: `
             <p>As a trainee, I helped to develop a web platform which displays product sales into a dashboard by accessing the location of each item sold and placing it in a world map. For this project we used leaflet as our map provides and webRTC for the real time sockets connection</p>
@@ -53,10 +52,8 @@ export const experiences = [
         `,
   },
   {
-    color: '#0ED3CF',
     title: 'Software Developer (Intern)',
     company: 'Turicun',
-    companyLogo: '/assets/images/experience/turicun.jpeg',
     date: '2012',
     description:
       'As an Intern, I helped with some bash scripting to migrate SQL files to get information from those and migrating it to KML files to be consumed in a web application to display public transportation routes into a map of the city.',
